@@ -29,6 +29,7 @@ const UserDetailProfile = ({ userDetails }) => {
           <img
             src={userDetails?.profile_url || "/user.jpg"}
             alt="profile"
+            crossOrigin="anonymous"
             width={"80px"}
             className="mb-2"
             style={{ borderRadius: "50%" }}
@@ -144,6 +145,7 @@ const UserDetailProfile = ({ userDetails }) => {
                           src={follower.user_id.profile_url || "/user.jpg"}
                           alt="profile"
                           width={"40px"}
+                          crossOrigin="anonymous"
                           style={{ borderRadius: "50%" }}
                         />
                         <div className="text-light">
@@ -155,6 +157,7 @@ const UserDetailProfile = ({ userDetails }) => {
                 )}
               </div>
             </Tab>
+            {console.log("following list", userDetails?.following_list)}
             <Tab eventKey="followings" title="Followings">
               <div className="followings">
                 {userDetails?.following_list?.length == 0 ? (
@@ -181,6 +184,7 @@ const UserDetailProfile = ({ userDetails }) => {
                             }
                             alt="profile"
                             width={"40px"}
+                            crossOrigin="anonymous"
                             style={{ borderRadius: "50%" }}
                           />
                           <div className="text-light">
@@ -213,6 +217,7 @@ const UserDetailProfile = ({ userDetails }) => {
                             src={conn.profile_url || "/user.jpg"}
                             alt="profile"
                             width={"40px"}
+                            crossOrigin="anonymous"
                             style={{ borderRadius: "50%" }}
                           />
                           <div className="text-light">{conn.full_name}</div>

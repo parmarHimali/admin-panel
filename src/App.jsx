@@ -44,7 +44,21 @@ const hexToRGBA = (hex, alpha) => {
 
   return hex; // Return original if invalid
 };
+export function rgbToHex(rgbString) {
+  // Extract numbers using regex
+  const match = rgbString.match(/\d+/g);
+  if (!match || match.length < 3) return null; // Invalid format
 
+  // Convert to hex
+  return (
+    "#" +
+    match
+      .slice(0, 3) // Get R, G, B values
+      .map((num) => Number(num).toString(16).padStart(2, "0")) // Convert & pad
+      .join("")
+      .toUpperCase()
+  );
+}
 export const rgbaWithOpacity = (color, alpha = 0.5) => {
   if (typeof color !== "string") return color; // Ensure it's a string
 
@@ -72,7 +86,7 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/signup" element={<Signup />} />
+        {/* <Route path="/signup" element={<Signup />} /> */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/" element={<MainContainer />}>
           <Route path="/" element={<DashboardCards />} />

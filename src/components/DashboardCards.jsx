@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 const DashboardCards = () => {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
-  const navigateTo = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {

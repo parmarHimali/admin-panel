@@ -79,10 +79,11 @@ const UserDetailPosts = ({ userDetails }) => {
                                     style={{
                                       width: `${opt.option_percentage}%`,
                                     }}
-                                  >
-                                    title
-                                  </div>
-                                  <div>{opt.option_percentage}</div>
+                                  ></div>
+                                  <span className="poll-text">
+                                    {opt.option_value}
+                                  </span>
+                                  <div>{opt.option_percentage}%</div>
                                 </div>
                               );
                             })}
@@ -279,10 +280,11 @@ const UserDetailPosts = ({ userDetails }) => {
                                     style={{
                                       width: `${opt.option_percentage}%`,
                                     }}
-                                  >
-                                    title
-                                  </div>
-                                  <div>{opt.option_percentage}</div>
+                                  ></div>
+                                  <span className="poll-text">
+                                    {opt.option_value}
+                                  </span>
+                                  <div>{opt.option_percentage}%</div>
                                 </div>
                               );
                             })}

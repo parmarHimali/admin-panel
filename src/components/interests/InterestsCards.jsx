@@ -1,24 +1,21 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Badge, Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { CiEdit } from "react-icons/ci";
 import { IoAddOutline } from "react-icons/io5";
 import { MdBlockFlipped } from "react-icons/md";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addSubInterest,
-  blockInterest,
-  blockSubInterest,
-  deleteInterest,
-  deleteSubInterest,
-  editInterest,
+  addSubInterests,
+  blockUnblockInterest,
+  blockUnblockSubInterest,
+  dltInterest,
+  dltSubInterest,
+  editInterests,
   editSubInterest,
-  getInterests,
-  getSubInterests,
 } from "../../store/interestSlice";
 import { toast } from "react-toastify";
-import { BASE_URL, rgbaWithOpacity } from "../../App";
+import { rgbaWithOpacity, rgbToHex } from "../../App";
 const InterestsCards = () => {
   const [showSubInterest, setShowSubInterest] = useState(false);
   const [subInterest, setSubInterest] = useState("");
@@ -41,70 +38,60 @@ const InterestsCards = () => {
     (state) => state.interests
   );
 
-  useEffect(() => {
-    console.log(subInterests);
-  }, [subInterests]);
   const dispatch = useDispatch();
 
   const handleAddSubInterest = async (e) => {
     e.preventDefault();
+    console.log({ addSubId, subInterest });
+
     try {
-      const { data } = await axios.post(
-        `${BASE_URL}/interest/addsub_interest`,
-        {
-          interest_id: addSubId,
-          sub_interest: subInterest,
-        }
-      );
-      console.log(data);
-      if (data.success) {
-        toast.success(data.message);
-        dispatch(addSubInterest(data.data));
+      const res = await dispatch(
+        addSubInterests({ addSubId, subInterest })
+      ).unwrap();
+      if (res.success) {
+        toast.success(res.message);
+        setShowSubInterest(false);
+        setSubInterest("");
+        setAddSubId("");
       } else {
-        toast.error(data.message);
+        toast.error(res.message);
       }
-      setShowSubInterest(false);
-      setSubInterest("");
-      setAddSubId("");
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message);
     }
-  };
+  }; //done
 
   const handleEditInterest = async (e, iId) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(`${BASE_URL}/interest/edit_interest`, {
-        interest_id: iId,
-        interestd: editData.interest,
-        color_code: editData.color_code,
-      });
-      console.log(data);
-      dispatch(editInterest(data.data));
-      toast.success(data.message);
+      const data = await dispatch(
+        editInterests({
+          interest_id: iId,
+          interestd: editData.interest,
+          color_code: editData.color_code,
+        })
+      ).unwrap();
+      if (data.success) {
+        setIsEdit(false);
+        setEditData({
+          _id: "",
+          interest: "",
+          color_code: "",
+        });
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.messgae);
     }
-    setIsEdit(false);
-    setEditData({
-      _id: "",
-      interest: "",
-      color_code: "",
-    });
-  };
+  }; //done
   const handleDeleteSubInterest = async (subId) => {
     try {
-      const { data } = await axios.post(
-        `${BASE_URL}/interest/delete_subinterest`,
-        {
-          subinterest_id: subId,
-        }
-      );
-      console.log(data);
+      const data = await dispatch(dltSubInterest(subId)).unwrap();
       if (data.success) {
-        dispatch(deleteSubInterest(data.data));
         toast.success(data.message);
       } else {
         toast.error(data.message);
@@ -113,43 +100,31 @@ const InterestsCards = () => {
       console.log(error);
       toast.error(error.response?.data?.message);
     }
-  };
+  }; //done
   const handleSubEdit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
-        `${BASE_URL}/interest/edit_subinterest`,
-        subEditData
-      );
-      console.log(data);
+      const data = await dispatch(editSubInterest(subEditData)).unwrap();
       if (data.success) {
+        setSubEditData({
+          sub_interest: "",
+          subinterest_id: "",
+        });
+        setIsSubEdit(false);
         toast.success(data.message);
-        dispatch(editSubInterest(data.data));
       } else {
         toast.error(data.message);
       }
-      setSubEditData({
-        sub_interest: "",
-        subinterest_id: "",
-      });
-      setIsSubEdit(false);
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message);
     }
-  };
+  }; //done
   const handleDeleteInterest = async (iId) => {
     try {
-      const { data } = await axios.post(
-        `${BASE_URL}/interest/delete_interest`,
-        {
-          interest_id: iId,
-        }
-      );
-      console.log(data);
+      const data = await dispatch(dltInterest(iId)).unwrap();
       if (data.success) {
         toast.success(data.message);
-        dispatch(deleteInterest(data.data));
       } else {
         toast.error(data.message);
       }
@@ -157,19 +132,12 @@ const InterestsCards = () => {
       console.log(error);
       toast.error(error.response?.data?.message);
     }
-  };
+  }; //done
   const handleBlockSub = async (subID) => {
     try {
-      const { data } = await axios.post(
-        `${BASE_URL}/interest/block_sub_interest`,
-        {
-          subinterest_id: subID,
-        }
-      );
-      console.log(data);
+      const data = await dispatch(blockUnblockSubInterest(subID)).unwrap();
       if (data.success) {
         toast.success(data.message);
-        dispatch(blockSubInterest(data.data));
       } else {
         toast.error(data.message);
       }
@@ -177,16 +145,12 @@ const InterestsCards = () => {
       console.log(error);
       toast.error(error.response?.data?.message);
     }
-  };
+  }; //done
   const handleBlockInterest = async (iId) => {
     try {
-      const { data } = await axios.post(`${BASE_URL}/interest/block_interest`, {
-        interest_id: iId,
-      });
-      console.log(data);
+      const data = await dispatch(blockUnblockInterest(iId)).unwrap();
       if (data.success) {
         toast.success(data.message);
-        dispatch(blockInterest(data.data));
       } else {
         toast.error(data.message);
       }
@@ -194,8 +158,7 @@ const InterestsCards = () => {
       console.log(error);
       toast.error(error.response?.data?.message);
     }
-  };
-  console.log(filteredInterest);
+  }; //done
 
   return (
     <>
@@ -204,7 +167,7 @@ const InterestsCards = () => {
           <Spinner animation="grow" variant="light" />
         </div>
       ) : filteredInterest?.length == 0 ? (
-        <h5 className="text-secondary text-center py-3">Interest not found</h5>
+        <h5 className="text-secondary text-center py-3">Interests not found</h5>
       ) : (
         filteredInterest?.map((subInt) => {
           return (
@@ -230,7 +193,9 @@ const InterestsCards = () => {
                       setEditData({
                         _id: subInt._id,
                         interest: subInt.interest,
-                        color_code: subInt.color_code,
+                        color_code: subInt.color_code.startsWith("#")
+                          ? subInt.color_code
+                          : rgbToHex(subInt.color_code),
                       });
                     }}
                   >
@@ -430,7 +395,7 @@ const InterestsCards = () => {
             <Form.Control
               type="color"
               value={editData.color_code}
-              defaultValue={editData.color_code}
+              // defaultValue={editData.color_code}
               onChange={(e) =>
                 setEditData({ ...editData, color_code: e.target.value })
               }

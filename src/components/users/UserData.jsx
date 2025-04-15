@@ -9,7 +9,6 @@ import {
 import { Button, Spinner } from "react-bootstrap";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import { MdBlockFlipped, MdVerified } from "react-icons/md";
-import { getCookieValue } from "../../App";
 import { useNavigate, useParams } from "react-router-dom";
 const customStyles = {
   table: {
@@ -65,19 +64,22 @@ const UserData = ({ search }) => {
   const { pageId, rows } = useParams();
   const [page, setPage] = useState(pageId || 1);
   const [rowsPerPage, setRowsPerPage] = useState(rows || 10);
+  const [order, setOrder] = useState("");
+  const [sortBy, setSortBy] = useState("");
   const { filteredUsersList, totalUsers, loadingUsers } = useSelector(
     (state) => state.users
   );
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getUsersList({ page, rowsPerPage, search }));
+    if (sortBy != "" && order != "") {
+      dispatch(
+        getUsersList({ page, rowsPerPage, search, sortOrder: order, sortBy })
+      );
+    } else {
+      dispatch(getUsersList({ page, rowsPerPage, search }));
+    }
   }, [page, rowsPerPage, search]);
-
-  useEffect(() => {
-    dispatch(getUsersList({ page: 1, rowsPerPage: 10, search }));
-  }, [search]);
-
   const handlePageChange = (newPage) => {
     setPage(newPage);
     navigateTo(`/users/${newPage}/${rowsPerPage}`);
@@ -89,7 +91,8 @@ const UserData = ({ search }) => {
   };
   const handleSort = (column, sortDirection) => {
     console.log(column, sortDirection);
-
+    setOrder(sortDirection == "asc" ? "1" : "-1");
+    setSortBy(column.name == "Name" ? "full_name" : "unique_name");
     if (column.name == "Name") {
       dispatch(
         getUsersList({
@@ -97,6 +100,7 @@ const UserData = ({ search }) => {
           rowsPerPage,
           sortOrder: sortDirection == "asc" ? "1" : "-1",
           sortBy: "full_name",
+          search,
         })
       );
     }
@@ -107,6 +111,7 @@ const UserData = ({ search }) => {
           rowsPerPage,
           sortOrder: sortDirection == "asc" ? "1" : "-1",
           sortBy: "unique_name",
+          search,
         })
       );
     }
@@ -125,6 +130,7 @@ const UserData = ({ search }) => {
             src={row.profile_url || "/user.jpg"}
             alt="profile"
             height={"40px"}
+            crossOrigin="anonymous"
             style={{ borderRadius: "50%" }}
           />{" "}
           <span>{row.full_name}</span>
@@ -227,6 +233,7 @@ const UserData = ({ search }) => {
         paginationServer
         paginationTotalRows={totalUsers}
         paginationPerPage={rowsPerPage}
+        paginationDefaultPage={page}
         paginationRowsPerPageOptions={[10, 20, 30]}
         onChangePage={handlePageChange}
         onChangeRowsPerPage={handlePerRowsChange}

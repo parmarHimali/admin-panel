@@ -69,6 +69,7 @@ const UserDetailBlockReport = ({ userDetails }) => {
                           src={blocked.block_user_id.profile_url || "/user.jpg"}
                           alt="profile"
                           width={"40px"}
+                          crossOrigin="anonymous"
                           style={{ borderRadius: "50%" }}
                         />
                         <div className="text-light">
@@ -102,6 +103,7 @@ const UserDetailBlockReport = ({ userDetails }) => {
                           <img
                             src={blocked?.profile_url || "/user.jpg"}
                             alt="profile"
+                            crossOrigin="anonymous"
                             width={"40px"}
                             style={{ borderRadius: "50%" }}
                           />
@@ -147,6 +149,7 @@ const UserDetailBlockReport = ({ userDetails }) => {
                         <img
                           src={reported.profile_url || "/user.jpg"}
                           alt="profile"
+                          crossOrigin="anonymous"
                           width={"40px"}
                           style={{ borderRadius: "50%" }}
                         />
@@ -178,6 +181,7 @@ const UserDetailBlockReport = ({ userDetails }) => {
                         <img
                           src={reported?.profile_url || "/user.jpg"}
                           alt="profile"
+                          crossOrigin="anonymous"
                           width={"40px"}
                           style={{ borderRadius: "50%" }}
                         />

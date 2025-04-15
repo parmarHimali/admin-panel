@@ -14,31 +14,7 @@ const initialState = {
 
   loadingDetails: false,
   connectionDetail: [],
-  opportunities: [
-    // {
-    //   _id: "6772348869db297b1657fb55",
-    //   user_id: "65eb4aefddf0d0012c8571d4",
-    //   position_title: "Hhux",
-    //   company_name: "Gxhx",
-    //   industry_id: "6756bdbf897e5d94930d37a7",
-    //   position_id: "6756bc0f897e5d94930d35fc",
-    //   stage_id: "6752ec6ccf62492cc28a23c2",
-    //   pay_type_id: "6752ec9bcf62492cc28a23d0",
-    //   pay_amount: 22,
-    //   overview: "Yydhdxhx",
-    //   position_status: "Active",
-    //   is_deleted: false,
-    //   createdAt: "2024-12-30T05:50:00.997Z",
-    //   industry: "Technology",
-    //   industry_color_code: "#EACA45",
-    //   position: "Business Partner",
-    //   position_color_code: "#53A6FF",
-    //   stage: "Startup Stage",
-    //   stage_color_code: "#46FF4B",
-    //   pay_type: "Commission",
-    //   pay_type_color_code: "#ffffff",
-    // },
-  ],
+  opportunities: [],
   reported_by_others: [],
   blocked_by_others: [],
   reported_by_me: [],
@@ -305,9 +281,6 @@ const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    setFilteredUsers: (state, action) => {
-      state.filteredUsersList = action.payload;
-    },
     deleteUser: (state, action) => {
       state.usersList = state.usersList.filter((user) => {
         return user._id != action.payload._id;
@@ -413,11 +386,6 @@ const userSlice = createSlice({
   },
 });
 
-export const {
-  setFilteredUsers,
-  deleteUser,
-  blockUser,
-  addUser,
-  removeSelectedUser,
-} = userSlice.actions;
+export const { deleteUser, blockUser, addUser, removeSelectedUser } =
+  userSlice.actions;
 export default userSlice.reducer;

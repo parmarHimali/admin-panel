@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, InputGroup, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, setFilteredUsers } from "../../store/userSlice";
+import { addUser } from "../../store/userSlice";
 import { IoAddOutline } from "react-icons/io5";
 import axios from "axios";
 import { BASE_URL } from "../../App";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
+import { Select } from "antd";
 
 const UserHeader = ({ setSearch, search }) => {
   const formik = useFormik({
@@ -18,6 +19,7 @@ const UserHeader = ({ setSearch, search }) => {
       dob: "",
       interested: [],
       unique_name: "",
+      country_code: "+91",
     },
     onSubmit: async (values) => {
       console.log({
@@ -90,9 +92,8 @@ const UserHeader = ({ setSearch, search }) => {
         err.password = "Please provide password";
       } else if (values.password.length < 6) {
         err.password = "Password must contain atleast 6 characters";
-      } else if (!/[^A-Za-z0-9 ]/.test(values.password)) {
-        err.password = "Password must contain atleast 1 special character";
       }
+
       if (values.mobile_number == "") {
         err.mobile_number = "Please provide mobile number";
       } else if (!/\d{10}/.test(values.mobile_number)) {
@@ -103,32 +104,55 @@ const UserHeader = ({ setSearch, search }) => {
         err.dob = "Please provide Date of Birth";
       } else if (new Date(values.dob) > new Date()) {
         err.dob = "Date of Birth cannot be in future";
+      } else {
+        const today = new Date();
+        const minBirthDate = new Date();
+        minBirthDate.setFullYear(today.getFullYear() - 18);
+        if (new Date(values.dob) > minBirthDate) {
+          err.dob = "age is not valid";
+        }
       }
+
       if (values.unique_name.trim() == "") {
         err.unique_name = "Please provide unique name";
       }
-      // if (values.interested.length == 0) {
-      //   err.interested = "Select atleast one interest";
-      // }
+      if (values.interested.length == 0) {
+        err.interested = "Select atleast one interest";
+      }
       return err;
     },
   });
+  const countryCodes = [
+    { name: "United States", code: "+1" },
+    { name: "Canada", code: "+1" },
+    { name: "United Kingdom", code: "+44" },
+    { name: "Australia", code: "+61" },
+    { name: "India", code: "+91" },
+    { name: "Germany", code: "+49" },
+    { name: "France", code: "+33" },
+    { name: "China", code: "+86" },
+    { name: "Japan", code: "+81" },
+    { name: "South Korea", code: "+82" },
+    { name: "Brazil", code: "+55" },
+    { name: "Mexico", code: "+52" },
+    { name: "Russia", code: "+7" },
+    { name: "Italy", code: "+39" },
+    { name: "Spain", code: "+34" },
+    { name: "Netherlands", code: "+31" },
+    { name: "Sweden", code: "+46" },
+    { name: "South Africa", code: "+27" },
+    { name: "Saudi Arabia", code: "+966" },
+    { name: "United Arab Emirates", code: "+971" },
+  ];
 
   const [showAddUser, setShowAddUser] = useState(false);
-  const { usersList } = useSelector((state) => state.users);
   const { subInterests } = useSelector((state) => state.interests);
   const dispatch = useDispatch();
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearch(query);
-    const filtered = usersList.filter((user) => {
-      return (
-        user.full_name.toLowerCase().includes(query.toLowerCase()) ||
-        user.unique_name.toLowerCase().includes(query.toLowerCase())
-      );
-    });
-    dispatch(setFilteredUsers(filtered));
   };
+  console.log(formik.values);
 
   return (
     <>
@@ -175,9 +199,6 @@ const UserHeader = ({ setSearch, search }) => {
             onClick={() => setShowAddUser(false)}
           ></button>
         </div>
-        <datalist id="interests">
-          <option value="Edge"></option>
-        </datalist>
 
         <Modal.Body>
           <Form className="p-2" onSubmit={formik.handleSubmit}>
@@ -190,6 +211,7 @@ const UserHeader = ({ setSearch, search }) => {
                 name="full_name"
                 value={formik.values.full_name}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               {formik.errors.full_name && formik.touched.full_name && (
                 <div className="text-danger">{formik.errors.full_name}</div>
@@ -204,6 +226,7 @@ const UserHeader = ({ setSearch, search }) => {
                 name="email_address"
                 value={formik.values.email_address}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               {formik.errors.email_address && formik.touched.email_address && (
                 <div className="text-danger">{formik.errors.email_address}</div>
@@ -219,12 +242,13 @@ const UserHeader = ({ setSearch, search }) => {
                 name="password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               {formik.errors.password && formik.touched.password && (
                 <div className="text-danger">{formik.errors.password}</div>
               )}
             </Form.Group>
-
+            {/* 
             <Form.Group className="mb-2">
               <Form.Label className="mb-1">Mobile Number</Form.Label>
               <Form.Control
@@ -234,11 +258,47 @@ const UserHeader = ({ setSearch, search }) => {
                 name="mobile_number"
                 value={formik.values.mobile_number}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               {formik.errors.mobile_number && formik.touched.mobile_number && (
                 <div className="text-danger">{formik.errors.mobile_number}</div>
               )}
+            </Form.Group> */}
+            <Form.Group className="mb-2">
+              <Form.Label className="mb-1">Mobile Number</Form.Label>
+              <InputGroup size="sm">
+                <Form.Select
+                  name="country_code"
+                  value={formik.values.country_code}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="pe-2"
+                  style={{ maxWidth: "80px" }}
+                >
+                  {countryCodes.map((country) => (
+                    <option value={country.code} key={country.name}>
+                      {country.code} {country.name}
+                    </option>
+                  ))}
+                </Form.Select>
+
+                <Form.Control
+                  type="number"
+                  name="mobile_number"
+                  placeholder="Enter mobile number"
+                  value={formik.values.mobile_number}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </InputGroup>
+
+              {formik.touched.mobile_number && formik.errors.mobile_number && (
+                <div className="text-danger small">
+                  {formik.errors.mobile_number}
+                </div>
+              )}
             </Form.Group>
+
             <Form.Group className="mb-2">
               <Form.Label className="mb-1">Date of Birth</Form.Label>
               <Form.Control
@@ -247,6 +307,7 @@ const UserHeader = ({ setSearch, search }) => {
                 name="dob"
                 value={formik.values.dob}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               {formik.errors.dob && formik.touched.dob && (
                 <div className="text-danger">{formik.errors.dob}</div>
@@ -261,39 +322,48 @@ const UserHeader = ({ setSearch, search }) => {
                 name="unique_name"
                 value={formik.values.unique_name}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               {formik.errors.unique_name && formik.touched.unique_name && (
                 <div className="text-danger">{formik.errors.unique_name}</div>
               )}
             </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label className="mb-1">Your Interests</Form.Label>
-              <Form.Select
-                size="sm"
-                name="interested"
-                multiple
-                onChange={() => {
-                  const selectedOptions = Array.from(
-                    event.target.selectedOptions,
-                    (option) => option.value
-                  );
-                  formik.setFieldValue("interested", selectedOptions);
+
+            <div className="mb-3">
+              <label htmlFor="interest" className="mb-1">
+                Interests
+              </label>
+              <Select
+                className="form-select-dark-sm"
+                mode="multiple"
+                id="interest"
+                size="small"
+                placeholder="Select Interests"
+                style={{ width: "100%" }}
+                showSearch
+                getPopupContainer={(trigger) => trigger.parentNode}
+                filterOption={(input, option) =>
+                  option?.children?.toLowerCase().includes(input.toLowerCase())
+                }
+                value={formik.values.interested}
+                onChange={(value) => {
+                  formik.setFieldValue("interested", value);
                 }}
               >
-                {subInterests?.map((subInt) => {
-                  return subInt.sub_interest_data?.map((sub) => {
-                    return (
-                      <option value={sub._id} key={sub._id}>
-                        {sub.sub_interest}
-                      </option>
-                    );
-                  });
-                })}
-              </Form.Select>
+                {subInterests?.map((subInt) =>
+                  subInt?.sub_interest_data?.map((sub) => (
+                    <Select.Option value={sub._id} key={sub._id}>
+                      {sub.sub_interest}
+                    </Select.Option>
+                  ))
+                )}
+              </Select>
               {formik.errors.interested && formik.touched.interested && (
                 <div className="text-danger">{formik.errors.interested}</div>
               )}
-            </Form.Group>
+            </div>
+
+            {/* </Form.Group> */}
             <Button
               className="d-flex gap-1 align-items-center"
               size="sm"

@@ -122,7 +122,7 @@ const Signup = () => {
             </div>
             <Button type="submit" className="mt-3 btn-pink">
               {loading ? (
-                <div className="d-flex gap-1">
+                <div className="d-flex gap-1 align-items-center">
                   <Spinner animation="grow" variant="light" size="sm" />
                   <span>Signing Up</span>
                 </div>

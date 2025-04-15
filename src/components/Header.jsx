@@ -4,13 +4,15 @@ import { toast } from "react-toastify";
 const Header = () => {
   const navigateTo = useNavigate();
   const hanleLogout = () => {
-    sessionStorage.removeItem("activeTab");
-
-    document.cookie = `admin_token=; expires=${new Date(
-      Date.now() - 98765678
-    )}; path=/`;
-    toast.success("Admin logout successfully!");
-    navigateTo("/signin");
+    const isLogout = confirm("Are you sure to logout?");
+    if (isLogout) {
+      sessionStorage.removeItem("activeTab");
+      document.cookie = `admin_token=; expires=${new Date(
+        Date.now() - 98765678
+      )}; path=/`;
+      toast.success("Admin logout successfully!");
+      navigateTo("/signin");
+    }
   };
 
   return (

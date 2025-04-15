@@ -107,14 +107,17 @@ input::placeholder {
   background-color: var(--pink);
   border: 1px solid transparent;
   transform: scale(0.99);
+  color: white;
 }
 .outline-pink:active {
   background-color: var(--pink) !important;
   border: 1px solid var(--pink-dark) !important;
+  color: white !important;
 }
 .outline-pink:focus {
   background-color: var(--pink) !important;
   border: 1px solid var(--pink-dark) !important;
+  color: white !important;
 }
 .card-badge .badge {
   padding: 10px;
@@ -292,4 +295,63 @@ img.post-media {
   padding: 20px;
   height: max-content;
   border-radius: 10px;
+}
+
+.poll-text {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  color: rgba(215, 215, 215, 0.742);
+}
+.post-modal .modal-content {
+  background-color: transparent;
+}
+/* .ant-select-selector {
+  background-color: #353535 !important;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  min-height: calc(1.5em + 0.5rem + calc(1px * 2));
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+.ant-select-selection-placeholder {
+  color: grey !important;
+} */
+
+/* Small dark select styling */
+.form-select-dark-sm .ant-select-selector {
+  background-color: #353535 !important;
+  border: 1px solid #555 !important;
+  color: #fff !important;
+  padding: 0.2rem 0.5rem !important; /* Bootstrap form-control-sm padding */
+  font-size: 0.875rem !important; /* Bootstrap sm font size */
+  border-radius: 0.2rem !important; /* Bootstrap sm border radius */
+  min-height: 30px !important;
+}
+
+/* Placeholder in sm */
+.form-select-dark-sm .ant-select-selection-placeholder {
+  color: #adb5bd !important; /* Bootstrap text-muted */
+  font-size: 0.875rem !important;
+}
+
+/* Dropdown dark styling */
+.form-select-dark-sm .ant-select-dropdown {
+  background-color: #2c2c2c !important;
+  color: #fff;
+}
+
+/* Options */
+.form-select-dark-sm .ant-select-item-option {
+  color: #fff;
+  font-size: 0.875rem;
+}
+
+.form-select-dark-sm .ant-select-item-option-active {
+  background-color: #444 !important;
+}
+
+.form-select-dark-sm .ant-select-item-option-selected {
+  background-color: #555 !important;
 }

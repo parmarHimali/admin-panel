@@ -140,41 +140,53 @@ const UserDetailInterest = ({ userDetails }) => {
           <h6>Interest</h6>
           <hr />
           <div className="interest-details">
-            <ListGroup>
-              {userDetails?.interested?.map((interest) => {
-                return (
-                  <ListGroup.Item
-                    as="li"
-                    className="d-flex justify-content-between align-items-center bg-dark text-light border-secondary"
-                    key={interest._id}
-                  >
-                    <span>{interest.sub_interest}</span>
-                    <div
-                      className="bedge p-1 px-2 rounded"
-                      style={{
-                        color: interest.interest_id.color_code,
-                        backgroundColor: rgbaWithOpacity(
-                          interest.interest_id.color_code,
-                          0.1
-                        ),
-                        fontSize: "14px",
-                      }}
+            {userDetails?.interested?.length > 0 ? (
+              <ListGroup>
+                {userDetails?.interested?.map((interest) => {
+                  return (
+                    <ListGroup.Item
+                      as="li"
+                      className="d-flex justify-content-between align-items-center bg-dark text-light border-secondary"
+                      key={interest._id}
                     >
-                      {interest.interest_id.interest}
-                    </div>
-                  </ListGroup.Item>
-                );
-              })}
-            </ListGroup>
+                      <span>{interest.sub_interest}</span>
+                      <div
+                        className="bedge p-1 px-2 rounded"
+                        style={{
+                          color: interest.interest_id.color_code,
+                          backgroundColor: rgbaWithOpacity(
+                            interest.interest_id.color_code,
+                            0.1
+                          ),
+                          fontSize: "14px",
+                        }}
+                      >
+                        {interest.interest_id.interest}
+                      </div>
+                    </ListGroup.Item>
+                  );
+                })}
+              </ListGroup>
+            ) : (
+              <h5 className="text-secondary text-center py-3">
+                Data not found
+              </h5>
+            )}
           </div>
         </div>
       </Col>
-      <Modal show={showImg} onHide={() => setShowImg(false)}>
+      <Modal
+        show={showImg}
+        onHide={() => setShowImg(false)}
+        className="d-flex justify-content-center post-modal"
+        centered
+      >
         <img
           src={
             // userDetails.account_verification?.gov_document ??
             "https://lvlup.services:9001/public/verification_document/9879_1735557043735.png"
           }
+          style={{ width: "500px", height: "600px", objectFit: "contain" }}
           alt="government document"
           onClick={() => setShowImg(true)}
         />

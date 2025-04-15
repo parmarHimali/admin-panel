@@ -5,7 +5,6 @@ import { IoAddOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addInterest, setFilteredInterest } from "../../store/interestSlice";
-import { BASE_URL } from "../../App";
 
 const InterestsHeader = () => {
   const [showInterest, setShowInterest] = useState(false);
@@ -14,29 +13,33 @@ const InterestsHeader = () => {
   const [search, setSearch] = useState("");
   const { subInterests } = useSelector((state) => state.interests);
   const dispatch = useDispatch();
+  useEffect(() => {
+    if (!showInterest && (interestName != "" || color != "#ffffff")) {
+      setColor("#ffffff");
+      setInterestName("");
+    }
+  }, [showInterest]);
   const handleAdd = async (e) => {
     e.preventDefault();
     if (interestName.trim() == "") {
+      toast.error("Please provide interest name");
       return;
     }
-
     try {
-      const { data } = await axios.post(`${BASE_URL}/interest/add_interest`, {
-        interestd: interestName,
-        color_code: color,
-      });
-      console.log(data);
-      setInterestName("");
-      setColor("");
+      const data = await dispatch(
+        addInterest({ interestName, color })
+      ).unwrap();
       if (data.success) {
         toast.success(data.message);
-        dispatch(addInterest(data.data));
+        setInterestName("");
+        setColor("#ffffff");
         setShowInterest(false);
       } else {
-        toast.error(data.data?.message);
+        toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
+      toast.error(error.response?.data?.message);
     }
   };
 

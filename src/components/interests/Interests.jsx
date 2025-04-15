@@ -1,6 +1,5 @@
 import React from "react";
-import { Button, Container, Form } from "react-bootstrap";
-import { IoAddOutline } from "react-icons/io5";
+import { Container } from "react-bootstrap";
 import InterestsHeader from "./InterestsHeader";
 import InterestsCards from "./InterestsCards";
 
@@ -14,8 +13,6 @@ const Interests = () => {
       </div>
       <div className="d-flex flex-column gap-3 mb-4">
         <InterestsCards />
-        {/* <InterestsCards /> */}
-        {/* <InterestsCards /> */}
       </div>
     </Container>
   );

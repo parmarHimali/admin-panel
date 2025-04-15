@@ -43,6 +43,7 @@ const PostDetails = () => {
                     src={postDetails?.user_id?.profile_url || "/user.jpg"}
                     alt="profile"
                     width={"40px"}
+                    crossOrigin="anonymous"
                     style={{ borderRadius: "50%" }}
                   />
                   <div className="text-light">
@@ -69,13 +70,13 @@ const PostDetails = () => {
                 <Row>
                   <Col lg={3}>Title</Col>
                   <Col lg={9} style={{ color: "#ccc" }}>
-                    {postDetails.title || "No Title available"}
+                    {postDetails.title || "-"}
                   </Col>
                 </Row>
                 <Row>
                   <Col lg={3}>Description</Col>
                   <Col lg={9} style={{ color: "#ccc" }}>
-                    {postDetails.description || "No description available"}
+                    {postDetails.description || "-"}
                   </Col>
                 </Row>
                 <Row>
@@ -95,9 +96,9 @@ const PostDetails = () => {
                                 width: `${opt.option_percentage}%`,
                               }}
                             >
-                              title
+                              {opt.option_value}
                             </div>
-                            <div>{opt.option_percentage}</div>
+                            <div>{opt.option_percentage}%</div>
                           </div>
                         );
                       })}
@@ -109,6 +110,7 @@ const PostDetails = () => {
                     src="https://lvlup.services:9001/public/post_media/9734_1709995832896.jpg"
                     alt="post pic"
                     className="post-media mt-2"
+                    crossOrigin="anonymous"
                     style={{ cursor: "pointer" }}
                     onClick={() => setShowImage(true)}
                   />
@@ -141,12 +143,19 @@ const PostDetails = () => {
           </Col>
         </Row>
       )}
-      <Modal show={showImage} onHide={() => setShowImage(false)}>
-        <img
-          src="https://lvlup.services:9001/public/post_media/9734_1709995832896.jpg"
-          alt="post pic"
-          width={"fit-content"}
-        />
+      <Modal
+        show={showImage}
+        onHide={() => setShowImage(false)}
+        centered
+        className="d-flex justify-content-center post-modal"
+      >
+        <Modal.Body>
+          <img
+            src="https://lvlup.services:9001/public/post_media/9734_1709995832896.jpg"
+            alt="post pic"
+            style={{ width: "500px", height: "500px", objectFit: "contain" }}
+          />
+        </Modal.Body>
       </Modal>
     </Container>
   );

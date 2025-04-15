@@ -121,15 +121,15 @@ const SignIn = () => {
                 </Form.Text>
               )}
             </Form.Group>
-            <div className="mt-1">
+            {/* <div className="mt-1">
               Already have an account?
               <Link className="ms-2 text-pink" to="/signup">
                 Sign Up
               </Link>
-            </div>
+            </div> */}
             <Button type="submit" className="mt-3 btn-pink">
               {loading ? (
-                <div className="d-flex gap-1">
+                <div className="d-flex gap-1 align-items-center">
                   <Spinner animation="grow" variant="light" size="sm" />
                   <span>Signing In</span>
                 </div>
